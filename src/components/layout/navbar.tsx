@@ -12,7 +12,7 @@ export const Navbar = () => {
   const [editingTitle, setEditingTitle] = useState(false);
   const { currentNote } = useEditorStore();
   const [title, setTitle] = useState(currentNote?.title || "");
-  const { updateNote, folders } = useNoteStore();
+  const { updateNote } = useNoteStore();
 
   const handleEditingTitle = () => {
     setEditingTitle(false);
