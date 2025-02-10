@@ -53,6 +53,12 @@ const config = {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
   			},
+				main: {
+					"white": "#FFF2F2",
+					"light-blue": "#A9B5DF",
+					"blue": "#7886C7",
+					"navy": "#2D336B"
+				},
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',

@@ -44,7 +44,7 @@
 
     --chart-5: 27 87% 67%;
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: #ffffff;
 
     --sidebar-foreground: 240 5.3% 26.1%;
 
@@ -94,7 +94,7 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
+    --sidebar-background: #292524;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
@@ -204,7 +204,11 @@
 }
 
 .sidebar-menu-sub {
-  @apply flex items-center justify-between;
+  @apply flex items-center justify-between py-2;
+
+  span {
+    @apply line-clamp-1;
+  }
 
   .btn-delete-note {
     @apply hidden text-red-800;

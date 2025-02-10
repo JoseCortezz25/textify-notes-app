@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { useNoteStore } from "@/stores/note";
 import { useEditorStore } from "@/stores/editor";
-import { ModeToggle } from "../mode-toggle";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export const Navbar = () => {
   const { toggleSidebar } = useSidebar();
@@ -21,10 +21,7 @@ export const Navbar = () => {
     if (!newTitle || newTitle === currentNote?.title) return;
 
     if (currentNote?.noteId) {
-      // Update both stores
-
       updateNote(currentNote.folderId || "", currentNote.noteId, newTitle);
-
     }
   };
 
@@ -42,7 +39,7 @@ export const Navbar = () => {
         </button>
 
         {currentNote && (
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center w-full">
             {editingTitle ? (
               <Input
                 type="text"
@@ -50,12 +47,12 @@ export const Navbar = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 onBlur={handleEditingTitle}
                 onKeyDown={(e) => e.key === 'Enter' && handleEditingTitle()}
-                className="border-b border-transparent focus:border-gray-400"
+                className="border-b border-transparent focus:border-gray-400 w-[100%] md:min-w-[300px]"
                 autoFocus
               />
             ) : (
               <h2
-                className="text-xl font-bold cursor-pointer"
+                className="text-xl font-bold cursor-pointer line-clamp-2 sm:w-[80%] lg:w-[100%] md:line-clamp-1"
                 onClick={() => setEditingTitle(true)}
               >
                 {title}

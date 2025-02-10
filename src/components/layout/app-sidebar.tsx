@@ -9,12 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Note } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 
 export const AppSidebar = () => {
   const { folders, createFolder } = useNoteStore();
   const [editingId, setEditingId] = useState<string | null>(null);
-  const { setCurrentNote } = useEditorStore();
+  const { setCurrentNote, currentNote } = useEditorStore();
   const { addNote } = useNoteStore();
 
   const handleEditFolder = (folderId: string, name: string) => {
@@ -42,7 +43,7 @@ export const AppSidebar = () => {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="py-7 mb-2 flex justify-between">
-            <span className="text-xl font-bold dark:text-white">Textify <b>Notes</b></span>
+            <span className="text-xl font-bold text-neutral-900 dark:text-white">Textify <b>Notes</b></span>
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -102,8 +103,9 @@ export const AppSidebar = () => {
                             <SidebarMenuSub
                               key={note.noteId}
                               onClick={() => setCurrentNote(note)}
+                              className={cn(currentNote && "bg-gray-100/50")}
                             >
-                              <SidebarMenuSubItem className="sidebar-menu-sub">
+                              <SidebarMenuSubItem className={cn("sidebar-menu-sub")}>
                                 <span>{note.title}</span>
 
                                 <Button
