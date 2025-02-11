@@ -44,7 +44,7 @@
 
     --chart-5: 27 87% 67%;
 
-    --sidebar-background: #ffffff;
+    --sidebar-background: #e4edfb;
 
     --sidebar-foreground: 240 5.3% 26.1%;
 
@@ -192,10 +192,30 @@
 }
 
 .sidebar-menu {
-  @apply flex justify-between items-center;
-
   &--actions {
     @apply hidden gap-2;
+  }
+
+  &__trigger {
+    @apply w-full;           
+    
+    &:hover {
+      @apply dark:bg-black-pearl-900;
+    }
+  }
+
+  &__trigger-btn {
+    @apply flex justify-between items-center bg-black-pearl-50 dark:bg-black-pearl-950 py-3 rounded-lg dark:hover:bg-black-pearl-700;
+  }
+
+  &__content {
+    ul {
+      @apply border-none;
+  
+      &:hover {
+        @apply bg-black-pearl-100/50 dark:bg-black-pearl-900 h-9 rounded-md;
+      }
+    }
   }
 
   &:hover .sidebar-menu--actions {
@@ -216,5 +236,17 @@
 
   &:hover .btn-delete-note {
     @apply flex;
+  }
+}
+
+.dropdown-content {
+  @apply rounded-lg bg-black-pearl-50 dark:bg-black-pearl-950;
+
+  [role="menuitem"] {
+    @apply rounded-md font-medium text-black-pearl-950 dark:text-black-pearl-50 cursor-pointer;
+
+    &:hover {
+      @apply bg-black-pearl-100/50 dark:bg-black-pearl-900;
+    }
   }
 }

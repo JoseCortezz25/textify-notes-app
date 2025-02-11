@@ -59,6 +59,24 @@ const config = {
 					"blue": "#7886C7",
 					"navy": "#2D336B"
 				},
+				selago: "#edf5fc",
+				periwinkle: "#cce0ff",
+				solitude: "#e6f4ff",
+				"black-pearl": {
+					950: "#01050e",
+					900: "#081630",
+					800: "#081630",
+					700: "#0e2448",
+					600: "#173854",
+					500: "#284967",
+					400: "#7b86a7",
+					300: "#90a1c1",
+					200: "#a9bbda",
+					100: "#c7daea",
+					60: "#edf5fc",
+					50: "#f7fafd",
+					20: "#fbfefe"
+				},
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',

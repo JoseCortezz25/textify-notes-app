@@ -24,7 +24,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head />
-      <body>
+      <body className="bg-black-pearl-50 dark:bg-black-pearl-950 text-neutral-950 dark:text-black-pearl-50">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

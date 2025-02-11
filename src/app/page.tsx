@@ -41,8 +41,10 @@ export default function Home() {
               <h2 className="text-2xl font-bold mb-2 text-center">Create a New Note</h2>
               <p className="text-lg mb-6 text-center">Click the button below to start creating your note.</p>
               <Button
+                variant="navy-secondary"
                 onClick={() => createFolder("New Folder")}
-                className="mx-auto bg-main-navy text-main-white dark:bg-main-white dark:text-main-navy font-bold rounded-full px-7"
+                className="mx-auto"
+                size="md"
               >
                 Create Note
               </Button>
