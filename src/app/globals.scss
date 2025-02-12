@@ -205,7 +205,7 @@
   }
 
   &__trigger-btn {
-    @apply flex justify-between items-center bg-black-pearl-50 dark:bg-black-pearl-950 py-3 rounded-lg dark:hover:bg-black-pearl-700;
+    @apply flex justify-between items-center bg-black-pearl-50 dark:bg-black-pearl-950 py-2 h-auto rounded-lg dark:hover:bg-black-pearl-700;
   }
 
   &__content {
@@ -213,7 +213,7 @@
       @apply border-none;
   
       &:hover {
-        @apply bg-black-pearl-100/50 dark:bg-black-pearl-900 h-9 rounded-md;
+        @apply bg-neutral-100 dark:bg-black-pearl-900 rounded-md cursor-pointer;
       }
     }
   }
@@ -247,6 +247,18 @@
 
     &:hover {
       @apply bg-black-pearl-100/50 dark:bg-black-pearl-900;
+    }
+  }
+}
+
+.editor-text {
+  &__option {
+    @apply hover:bg-main-light-blue;
+  }
+
+  &__content {
+    mark {
+      @apply bg-sky-500;
     }
   }
 }

@@ -16,7 +16,7 @@ export const AppSidebar = () => {
   const { folders, createFolder } = useNoteStore();
   const [editingId, setEditingId] = useState<string | null>(null);
   const { setCurrentNote } = useEditorStore();
-  const { addNote } = useNoteStore();
+  const { addNote, deleteNote } = useNoteStore();
 
   const handleEditFolder = (folderId: string, name: string) => {
     setEditingId(null);
@@ -83,16 +83,22 @@ export const AppSidebar = () => {
                                   <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-4 w-4 dark:hoder-bg-black-pearl-950"
-                                    onClick={() => onAddNote(folder.folderId)}
+                                    className="h-4 w-4 hover:text-black-pearl-700 dark:hoder-bg-black-pearl-950"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onAddNote(folder.folderId);
+                                    }}
                                   >
                                     <Plus className="h-3 w-3" />
                                   </Button>
                                   <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-4 w-4 dark:hoder-bg-black-pearl-950"
-                                    onClick={() => setEditingId(folder.folderId)}
+                                    className="h-4 w-4 hover:text-black-pearl-700 dark:hoder-bg-black-pearl-950"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setEditingId(folder.folderId);
+                                    }}
                                   >
                                     <Pencil className="h-3 w-3" />
                                   </Button>
@@ -108,12 +114,14 @@ export const AppSidebar = () => {
                               >
                                 <SidebarMenuSubItem className={cn("sidebar-menu-sub")}>
                                   <span>{note.title}</span>
-
                                   <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-4 w-4 btn-delete-note"
-                                    onClick={() => setCurrentNote(note)}
+                                    className="h-3 w-3 btn-delete-note hover:text-red-800"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      deleteNote(folder.folderId, note.noteId);
+                                    }}
                                   >
                                     <Trash />
                                   </Button>

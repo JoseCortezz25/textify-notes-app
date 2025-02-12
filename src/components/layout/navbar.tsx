@@ -47,12 +47,12 @@ export const Navbar = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 onBlur={handleEditingTitle}
                 onKeyDown={(e) => e.key === 'Enter' && handleEditingTitle()}
-                className="border-b border-transparent focus:border-gray-400 w-[100%] md:min-w-[300px]"
+                className="bg-transparent border-none outline-none ring-0 focus:border-none focus:outline-none focus:ring-0 w-[100%] md:min-w-[300px] focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-transparent focus:ring-offset-2 rounded-none focus-visible:ring-offset-transparent focus-visible:ring-transparent px-"
                 autoFocus
               />
             ) : (
               <h2
-                className="text-xl font-bold cursor-pointer line-clamp-2 sm:w-[80%] lg:w-[100%] md:line-clamp-1"
+                className="text-xl font-bold cursor-pointer line-clamp-2 w-full md:line-clamp-1"
                 onClick={() => setEditingTitle(true)}
               >
                 {title}

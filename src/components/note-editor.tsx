@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Bold, Italic, Underline, List, ListOrdered, Heading, HighlighterIcon, ListTodo } from "lucide-react";
 import UnderlineExtension from "@tiptap/extension-underline";
 import { Note } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 export const NoteEditor = ({ note }: { note: Note | null }) => {
   const editor = useEditor({
@@ -25,13 +26,13 @@ export const NoteEditor = ({ note }: { note: Note | null }) => {
   }
 
   return (
-    <section className="flex-1 flex flex-col overflow-hidden">
+    <section className="editor-text flex-1 flex flex-col overflow-hidden">
       <div className="border-b p-2 flex items-center gap-2">
         <Button
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={editor.isActive("bold") ? "bg-muted" : ""}
+          className={cn("editor-text__option", editor.isActive("bold") ? "bg-main-light-blue/30" : "")}
         >
           <Bold className="h-4 w-4" />
         </Button>
@@ -39,7 +40,7 @@ export const NoteEditor = ({ note }: { note: Note | null }) => {
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={editor.isActive("italic") ? "bg-muted" : ""}
+          className={cn("editor-text__option", editor.isActive("italic") && "bg-main-light-blue/30")}
         >
           <Italic className="h-4 w-4" />
         </Button>
@@ -47,7 +48,7 @@ export const NoteEditor = ({ note }: { note: Note | null }) => {
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={editor.isActive("underline") ? "bg-muted" : ""}
+          className={cn("editor-text__option", editor.isActive("underline") && "bg-main-light-blue/30")}
         >
           <Underline className="h-4 w-4" />
         </Button>
@@ -55,7 +56,7 @@ export const NoteEditor = ({ note }: { note: Note | null }) => {
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={editor.isActive("heading", { level: 1 }) ? "bg-muted" : ""}
+          className={cn("editor-text__option", editor.isActive("heading", { level: 1 }) && "bg-muted")}
         >
           <Heading className="h-4 w-4" />
         </Button>
@@ -63,7 +64,7 @@ export const NoteEditor = ({ note }: { note: Note | null }) => {
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={editor.isActive("bulletList") ? "bg-muted" : ""}
+          className={cn("editor-text__option", editor.isActive("bulletList") && "bg-muted")}
         >
           <List className="h-4 w-4" />
         </Button>
@@ -71,7 +72,7 @@ export const NoteEditor = ({ note }: { note: Note | null }) => {
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={editor.isActive("orderedList") ? "bg-muted" : ""}
+          className={cn("editor-text__option", editor.isActive("orderedList") && "bg-muted")}
         >
           <ListOrdered className="h-4 w-4" />
         </Button>
@@ -79,7 +80,7 @@ export const NoteEditor = ({ note }: { note: Note | null }) => {
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleHighlight({ color: '#00ff66' }).run()}
-          className={editor.isActive("highlight") ? "bg-muted" : ""}
+          className={`editor-text__option ${editor.isActive("highlight") ? "bg-muted" : ""}`}
         >
           <HighlighterIcon className="h-4 w-4" />
         </Button>
@@ -87,13 +88,13 @@ export const NoteEditor = ({ note }: { note: Note | null }) => {
           variant="ghost"
           size="sm"
           onClick={() => editor.chain().focus().toggleTaskList().run()}
-          className={editor.isActive("taskList") ? "bg-muted" : ""}
+          className={`editor-text__option ${editor.isActive("taskList") ? "bg-muted" : ""}`}
         >
           <ListTodo className="h-4 w-4" />
         </Button>
 
       </div>
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto editor-text__content">
         <EditorContent editor={editor} />
       </div>
     </section>
