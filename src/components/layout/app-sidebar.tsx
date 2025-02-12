@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 export const AppSidebar = () => {
   const { folders, createFolder } = useNoteStore();
   const [editingId, setEditingId] = useState<string | null>(null);
-  const { setCurrentNote, currentNote } = useEditorStore();
+  const { setCurrentNote } = useEditorStore();
   const { addNote } = useNoteStore();
 
   const handleEditFolder = (folderId: string, name: string) => {
