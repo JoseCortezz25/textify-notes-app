@@ -7,10 +7,24 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useEditorStore } from "@/stores/editor";
 import { useNoteStore } from "@/stores/note";
+import { useEffect } from "react";
 
 export default function Home() {
   const { currentNote } = useEditorStore();
-  const { createFolder } = useNoteStore();
+  const { createFolder, initializeFolders, loading } = useNoteStore();
+
+  useEffect(() => {
+    initializeFolders();
+  }, [initializeFolders]);
+
+  if (loading) {
+    return (
+      <main className="w-full flex justify-center items-center h-screen">
+        <p>Loading...</p>
+      </main>
+    );
+  }
+
 
   return (
     <main className="w-full flex flex-col h-screen">

@@ -20,6 +20,8 @@ export const useNoteStore = create<FolderStore>((set, get) => ({
   initializeFolders: async () => {
     try {
       const folders = await Database.getInstance().getAllFolders();
+      console.log('Folders:', folders);
+      
       set({ folders, loading: false });
     } catch (error) {
       console.error('Error loading folders:', error);

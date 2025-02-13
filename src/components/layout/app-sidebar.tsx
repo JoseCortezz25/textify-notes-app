@@ -40,7 +40,7 @@ export const AppSidebar = () => {
 
   return (
     <Sidebar>
-      <SidebarContent className="bg-[#f0f9ff/80]">
+      <SidebarContent className="bg-black-pearl-50 dark:bg-black-pearl-950">
         <SidebarGroup>
           <SidebarGroupLabel className="py-7 mb-2 flex justify-between">
             <span className="text-xl font-medium text-neutral-900 dark:text-white">Textify <b className="font-black">Notes</b></span>
@@ -107,7 +107,7 @@ export const AppSidebar = () => {
                             </SidebarMenuButton>
                           </CollapsibleTrigger>
                           <CollapsibleContent className="sidebar-menu__content">
-                            {folder.notes.map((note) => (
+                            {folder.notes && folder.notes.map((note) => (
                               <SidebarMenuSub
                                 key={note.noteId}
                                 onClick={() => setCurrentNote(note)}

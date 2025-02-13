@@ -4,30 +4,41 @@ class Database {
   private static instance: Database;
   private db: IDBDatabase | null = null;
   private request: IDBOpenDBRequest;
+  private dbReady: Promise<void>;
 
   private constructor() {
     this.request = indexedDB.open("txy-notes", 1);
 
-    this.request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
-      this.db = (event.target as IDBOpenDBRequest).result;
+    this.dbReady = new Promise((resolve, reject) => {
+      this.request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
+        this.db = (event.target as IDBOpenDBRequest).result;
 
-      if (this.db.objectStoreNames.contains("folder")) {
-        this.db.deleteObjectStore("folder");
-      }
+        if (this.db.objectStoreNames.contains("folder")) {
+          this.db.deleteObjectStore("folder");
+        }
 
-      this.db.createObjectStore("folder", { keyPath: "folderId", autoIncrement: true });
-    };
+        this.db.createObjectStore("folder", { keyPath: "folderId", autoIncrement: true });
+      };
 
-    this.request.onsuccess = (event: Event) => {
-      this.db = (event.target as IDBOpenDBRequest).result;
-    };
+      this.request.onsuccess = (event: Event) => {
+        this.db = (event.target as IDBOpenDBRequest).result;
+        resolve();
+      };
 
-    this.request.onerror = (event) => {
-      console.error("Error opening database", event);
-    };
+      this.request.onerror = (event) => {
+        console.error("Error opening database", event);
+        reject(new Error("Failed to initialize database"));
+      };
+    });
   }
 
-  public getAllFolders(): Promise<Folder[]> {
+  public async waitForConnection(): Promise<void> {
+    return this.dbReady;
+  }
+
+  public async getAllFolders(): Promise<Folder[]> {
+    await this.waitForConnection();
+
     return new Promise((resolve, reject) => {
       if (!this.db) {
         reject(new Error("Database not initialized"));
@@ -39,7 +50,7 @@ class Database {
       const request = store.getAll();
 
       request.onsuccess = () => {
-        resolve(request.result);
+        resolve(request.result || []);
       };
 
       request.onerror = () => {
@@ -48,7 +59,9 @@ class Database {
     });
   }
 
-  public addFolder(folder: Folder): Promise<void> {
+  public async addFolder(folder: Folder): Promise<void> {
+    await this.waitForConnection();
+
     return new Promise((resolve, reject) => {
       if (!this.db) {
         reject(new Error("Database not initialized"));
@@ -57,14 +70,16 @@ class Database {
 
       const transaction = this.db.transaction("folder", "readwrite");
       const store = transaction.objectStore("folder");
-      const request = store.add({id: folder.folderId, folder});
+      const request = store.add({ id: folder.folderId, folder });
 
       request.onsuccess = () => resolve();
       request.onerror = () => reject(new Error("Error adding folder"));
     });
   }
 
-  public updateFolder(folder: Folder): Promise<void> {
+  public async updateFolder(folder: Folder): Promise<void> {
+    await this.waitForConnection();
+
     return new Promise((resolve, reject) => {
       if (!this.db) {
         reject(new Error("Database not initialized"));
@@ -73,14 +88,16 @@ class Database {
 
       const transaction = this.db.transaction("folder", "readwrite");
       const store = transaction.objectStore("folder");
-      const request = store.put({id: folder.folderId, folder});
+      const request = store.put({ id: folder.folderId, folder });
 
       request.onsuccess = () => resolve();
       request.onerror = () => reject(new Error("Error updating folder"));
     });
   }
 
-  public deleteFolder(folderId: string): Promise<void> {
+  public async deleteFolder(folderId: string): Promise<void> {
+    await this.waitForConnection();
+
     return new Promise((resolve, reject) => {
       if (!this.db) {
         reject(new Error("Database not initialized"));
@@ -96,7 +113,9 @@ class Database {
     });
   }
 
-  public addNoteInFolder(note: Note, folderId: string): void {
+  public async addNoteInFolder(note: Note, folderId: string): Promise<void> {
+    await this.waitForConnection();
+
     if (!this.db) return;
 
     const transaction = this.db.transaction("folder", "readwrite");
