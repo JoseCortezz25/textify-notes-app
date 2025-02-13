@@ -115,16 +115,20 @@
 }
 
 .bg-white-checked-icon {
-  background-image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7'%3E%3C/path%3E%3C/svg%3E";
+  background-image: url("/white-check-icon.png");
+}
+
+.dark .bg-white-checked-icon {
+  background-image: url("/white-check-icon.png");
 }
 
 @layer components {
   .bg-black-checked-icon {
-    background-image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='black'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7'%3E%3C/path%3E%3C/svg%3E";
+    background-image: url("/black-check-icon.png");
   }
 
   .dark .bg-black-checked-icon {
-    background-image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='black'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7'%3E%3C/path%3E%3C/svg%3E";
+    background-image: url("/black-check-icon.png");
   }
 }
 
@@ -170,8 +174,6 @@
           content: "";
           @apply absolute border border-black dark:border-white rounded-full w-5 h-5;
         }
-
-
       }
   
       div {
@@ -184,7 +186,7 @@
         @apply text-white stroke-white dark:text-black;
 
         &::before {
-          @apply bg-primary bg-white-checked-icon dark:bg-black-checked-icon;
+          @apply bg-primary bg-white-checked-icon dark:bg-black-checked-icon bg-cover bg-no-repeat bg-bottom;
         }
       }
     }
