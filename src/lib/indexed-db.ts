@@ -38,7 +38,7 @@ class Database {
 
   public async getAllFolders(): Promise<Folder[]> {
     await this.waitForConnection();
-
+    
     return new Promise((resolve, reject) => {
       if (!this.db) {
         reject(new Error("Database not initialized"));
@@ -50,7 +50,14 @@ class Database {
       const request = store.getAll();
 
       request.onsuccess = () => {
-        resolve(request.result || []);
+        // Normalize the data structure
+        const folders = request.result.map(item => {
+          if ('folder' in item) {
+            return item.folder;
+          }
+          return item;
+        });
+        resolve(folders);
       };
 
       request.onerror = () => {
@@ -70,7 +77,11 @@ class Database {
 
       const transaction = this.db.transaction("folder", "readwrite");
       const store = transaction.objectStore("folder");
-      const request = store.add({ id: folder.folderId, folder });
+      // Store with consistent structure
+      const request = store.add({
+        id: folder.folderId,
+        folder: folder
+      });
 
       request.onsuccess = () => resolve();
       request.onerror = () => reject(new Error("Error adding folder"));
@@ -79,17 +90,20 @@ class Database {
 
   public async updateFolder(folder: Folder): Promise<void> {
     await this.waitForConnection();
-
+  
     return new Promise((resolve, reject) => {
       if (!this.db) {
         reject(new Error("Database not initialized"));
         return;
       }
-
+  
       const transaction = this.db.transaction("folder", "readwrite");
       const store = transaction.objectStore("folder");
-      const request = store.put({ id: folder.folderId, folder });
-
+      const request = store.put({
+        id: folder.folderId,
+        folder: folder
+      });
+  
       request.onsuccess = () => resolve();
       request.onerror = () => reject(new Error("Error updating folder"));
     });

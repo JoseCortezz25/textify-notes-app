@@ -10,12 +10,19 @@ import { useNoteStore } from "@/stores/note";
 import { useEffect } from "react";
 
 export default function Home() {
-  const { currentNote } = useEditorStore();
+  const { currentNote, setCurrentNote } = useEditorStore();
   const { createFolder, initializeFolders, loading } = useNoteStore();
 
   useEffect(() => {
     initializeFolders();
   }, [initializeFolders]);
+
+  const handleCreateNote = async () => {
+    const newFolder = await createFolder("New Folder");
+    if (newFolder && newFolder.notes.length > 0) {
+      setCurrentNote(newFolder.notes[0]);
+    }
+  };
 
   if (loading) {
     return (
@@ -24,7 +31,6 @@ export default function Home() {
       </main>
     );
   }
-
 
   return (
     <main className="w-full flex flex-col h-screen">
@@ -56,7 +62,7 @@ export default function Home() {
               <p className="text-lg mb-6 text-center">Click the button below to start creating your note.</p>
               <Button
                 variant="navy-secondary"
-                onClick={() => createFolder("New Folder")}
+                onClick={handleCreateNote}
                 className="mx-auto"
                 size="md"
               >

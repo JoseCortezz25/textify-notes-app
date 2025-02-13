@@ -1,5 +1,5 @@
 "use client";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Highlight from "@tiptap/extension-highlight";
 import TaskList from "@tiptap/extension-task-list";
@@ -8,18 +8,33 @@ import { Button } from "@/components/ui/button";
 import { Bold, Italic, Underline, List, ListOrdered, Heading, HighlighterIcon, ListTodo } from "lucide-react";
 import UnderlineExtension from "@tiptap/extension-underline";
 import { Note } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { cn, debounce } from "@/lib/utils";
+import { useNoteStore } from "@/stores/note";
+import { useEffect } from 'react';
 
-export const NoteEditor = ({ note }: { note: Note | null }) => {
+export const NoteEditor = ({ note }: { note: Note }) => {
+  const { updateNoteContent } = useNoteStore();
+
   const editor = useEditor({
     extensions: [StarterKit, Highlight, TaskList, TaskItem, UnderlineExtension],
-    content: note?.content || "",
+    content: note.content,
     editorProps: {
       attributes: {
         class: "editor-content prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none"
       }
-    }
+    },
+    onUpdate: debounce((args) => {
+      const { editor } = args as { editor: Editor };
+      const content = editor.getHTML();
+      updateNoteContent(note.folderId, note.noteId, content);
+    }, 500)
   });
+
+  useEffect(() => {
+    if (editor && note.content !== editor.getHTML()) {
+      editor.commands.setContent(note.content);
+    }
+  }, [note.content, note.noteId, editor]);
 
   if (!editor) {
     return null;

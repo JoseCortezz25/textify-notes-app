@@ -257,6 +257,8 @@
   }
 
   &__content {
+    @apply mx-auto w-full lg:w-[70%] xl:w-[50%];
+
     mark {
       @apply bg-sky-500;
     }
