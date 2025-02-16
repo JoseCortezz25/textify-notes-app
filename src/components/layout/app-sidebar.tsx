@@ -38,7 +38,7 @@ export const AppSidebar = () => {
     const newNote: Note = {
       noteId: `note-${Date.now().toString()}`,
       title: "New Note",
-      content: "",
+      content: "Go ahead and start writing your note here...",
       createdAt: new Date().toISOString(),
       folderId
     };
@@ -133,7 +133,7 @@ export const AppSidebar = () => {
                                   <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-3 w-3 btn-delete-note hover:text-red-800"
+                                    className="h-3 w-3 btn-delete-note hover:text-red-800 dark:text-red-400"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       deleteNote(folder.folderId, note.noteId);

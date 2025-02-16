@@ -255,7 +255,7 @@
 
 .editor-text {
   &__option {
-    @apply hover:bg-main-light-blue;
+    @apply p-2.5 rounded-sm hover:bg-main-light-blue/30 dark:hover:bg-black-pearl-800;
   }
 
   &__content {
@@ -263,6 +263,10 @@
 
     mark {
       @apply bg-sky-500;
+    }
+
+    pre {
+      @apply bg-black-pearl-100/20 dark:bg-[#020816] px-4 py-2 rounded-sm;
     }
   }
 }
