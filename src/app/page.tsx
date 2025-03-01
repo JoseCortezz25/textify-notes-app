@@ -11,11 +11,12 @@ import { useEffect } from "react";
 
 export default function Home() {
   const { currentNote, setCurrentNote } = useEditorStore();
-  const { createFolder, initializeFolders, loading } = useNoteStore();
+  const { createFolder, loading, initializeFolders } = useNoteStore();
 
   useEffect(() => {
     initializeFolders();
   }, [initializeFolders]);
+
 
   const handleCreateNote = async () => {
     const newFolder = await createFolder("New Folder");
@@ -26,8 +27,9 @@ export default function Home() {
 
   if (loading) {
     return (
-      <main className="w-full flex justify-center items-center h-screen">
-        <p>Loading...</p>
+      <main className="w-full flex flex-col justify-center items-center h-screen">
+        <div className="loader"></div>
+        <p className="italic mt-5">Loading your docs...</p>
       </main>
     );
   }

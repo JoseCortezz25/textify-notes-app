@@ -19,7 +19,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         "navy-secondary": "bg-black-pearl-900 text-black-pearl-60 dark:bg-black-pearl-50 dark:text-black-pearl-900 hover:bg-black-pearl-800 hover:text-black-pearl-60 dark:hover:bg-black-pearl-60 dark:hover:text-black-pearl-900 font-bold rounded-full ",
-        "light-navy-secondary": "bg-black-pearl-50 text-navy dark:bg-black-pearl-900 dark:text-black-pearl-60 hover:bg-black-pearl-60 hover:text-black-pearl-900 dark:hover:bg-black-pearl-800 dark:hover:text-black-pearl-60 font-bold rounded-full"
+        "light-navy-secondary": "bg-black-pearl-60 hover:bg-black-pearl-100/50 hover:text-black-pearl-900 text-navy dark:bg-black-pearl-900 dark:text-black-pearl-60  hover:text-black-pearl-900 dark:hover:bg-black-pearl-800 dark:hover:text-black-pearl-60 font-bold rounded-full"
       },
       size: {
         default: "h-10 px-4 py-2",
