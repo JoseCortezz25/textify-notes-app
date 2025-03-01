@@ -1,0 +1,30 @@
+.editor-text {
+  @apply  mx-auto;
+  &__option {
+    @apply p-2.5 rounded-sm hover:bg-main-light-blue/30 dark:hover:bg-black-pearl-800;
+  }
+
+  &__content {
+    @apply mx-auto w-full lg:max-w-[80ch];
+
+    p, h1, span {
+      @apply text-black-pearl-950 dark:text-black-pearl-50 my-3;
+    }
+
+    mark {
+      @apply bg-[#0ea5e980];
+    }
+
+    pre {
+      @apply bg-black-pearl-100/20 dark:bg-[#020816] px-4 py-2 rounded-sm;
+    }
+  }
+}
+
+.toolbar {
+  @apply fixed z-50 bg-white dark:bg-gray-800 shadow-md px-[9px] py-[6px] rounded-[12px] flex items-center gap-2 border border-gray-200 dark:border-gray-700;
+
+  &__item {
+    @apply p-2 hover:bg-periwinkle/30 dark:hover:bg-gray-700 rounded-[calc(12px_/_2)];
+  }
+}
