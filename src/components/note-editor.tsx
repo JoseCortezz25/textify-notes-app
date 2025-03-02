@@ -1,13 +1,13 @@
 "use client";
+
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Highlight from "@tiptap/extension-highlight";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
-import { Bold, Italic, Underline, List, ListOrdered, Heading, HighlighterIcon, ListTodo } from "lucide-react";
 import UnderlineExtension from "@tiptap/extension-underline";
 import { Note } from "@/lib/types";
-import { cn, debounce } from "@/lib/utils";
+import { debounce } from "@/lib/utils";
 import { useNoteStore } from "@/stores/note";
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { FloatingToolbar } from "./floating-toolbar";
@@ -15,6 +15,7 @@ import { FloatingToolbar } from "./floating-toolbar";
 export const NoteEditor = ({ note }: { note: Note }) => {
   const { updateNoteContent } = useNoteStore();
   const editorRef = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedText, setSelectedText] = useState<string>("");
 
   const editor = useEditor({
@@ -32,15 +33,12 @@ export const NoteEditor = ({ note }: { note: Note }) => {
     }, 500)
   });
 
-  // Handler for AI actions on selected text
   const handleAiAction = useCallback((text: string) => {
     setSelectedText(text);
-    // Here you can add any AI-related actions, like showing a modal
+    // TODO: Implement AI action
     console.log("AI action triggered with text:", text);
-    // You could open a modal here, or trigger an API call
   }, []);
 
-  // Update content when the note changes
   useEffect(() => {
     if (editor && editor.getHTML() !== note.content) {
       editor.commands.setContent(note.content);

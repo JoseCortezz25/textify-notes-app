@@ -1,22 +1,56 @@
 "use client";
 
 import { Editor } from '@tiptap/react';
-import { useCallback, useEffect, useState } from 'react';
-import { Bold, Italic, Underline, List, ListOrdered, Heading2, HighlighterIcon, Sparkles, ListTodo } from "lucide-react";
+import { useCallback, useEffect, useState, useRef } from 'react';
+import {
+  Bold,
+  Italic,
+  Underline,
+  List,
+  ListOrdered,
+  HighlighterIcon,
+  ListTodo,
+  PenTool,
+  Heading1,
+  Heading2,
+  Heading3
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from './ui/separator';
+import { AiToolbar, AiOptions } from './ai-toolbar';
 
 type FloatingToolbarProps = {
   editor: Editor;
-  onAiAction?: (selectedText: string) => void;
+  onAiAction?: (selectedText: string, options?: AiOptions) => void;
 };
 
 export const FloatingToolbar = ({ editor, onAiAction }: FloatingToolbarProps) => {
+  const toolbarRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ top: -9999, left: -9999 });
   const [isVisible, setIsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [showAiToolbar, setShowAiToolbar] = useState(false);
+  const [hasSelection, setHasSelection] = useState(false);
+
+  useEffect(() => {
+    const MOBILE_BREAKPOINT = 768;
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    };
+
+    checkIfMobile();
+
+    window.addEventListener('resize', checkIfMobile);
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
 
   const updateToolbarPosition = useCallback(() => {
-    if (!editor.state.selection.empty) {
+    if (!editor) return;
+
+    const hasTextSelection = !editor.state.selection.empty;
+    setHasSelection(hasTextSelection);
+
+    if (hasTextSelection) {
       const { view } = editor;
       const { from, to } = editor.state.selection;
 
@@ -29,16 +63,16 @@ export const FloatingToolbar = ({ editor, onAiAction }: FloatingToolbarProps) =>
       };
 
       setPosition({
-        top: selectionCenter.top - 50,
-        left: Math.max(10, Math.min(selectionCenter.left - 150,
-          document.body.clientWidth - 300)) // Keep within viewport
+        top: selectionCenter.top - (isMobile ? 30 : 60),
+        left: Math.max(10, Math.min(selectionCenter.left - (isMobile ? 40 : 150),
+          document.body.clientWidth - (isMobile ? 80 : 300)))
       });
 
       setIsVisible(true);
     } else {
-      setIsVisible(false);
+      setIsVisible(isMobile);
     }
-  }, [editor]);
+  }, [editor, isMobile]);
 
   useEffect(() => {
     if (!editor) return;
@@ -51,113 +85,191 @@ export const FloatingToolbar = ({ editor, onAiAction }: FloatingToolbarProps) =>
       if (isVisible) updateToolbarPosition();
     };
 
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!isMobile && toolbarRef.current && !toolbarRef.current.contains(e.target as Node)) {
+        if (editor.state.selection.empty) {
+          setIsVisible(false);
+        }
+      }
+    };
+
     editor.on('selectionUpdate', handleSelectionUpdate);
     window.addEventListener('resize', handleWindowResize);
     document.addEventListener('scroll', handleWindowResize);
+    document.addEventListener('mousedown', handleClickOutside);
+
+    if (isMobile) {
+      setIsVisible(true);
+    }
 
     return () => {
       editor.off('selectionUpdate', handleSelectionUpdate);
       window.removeEventListener('resize', handleWindowResize);
       document.removeEventListener('scroll', handleWindowResize);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [editor, isVisible, updateToolbarPosition]);
+  }, [editor, isVisible, updateToolbarPosition, isMobile]);
 
-  const handleAiClick = () => {
+
+  const handleAiApply = (options: AiOptions) => {
     if (editor && !editor.state.selection.empty) {
       const { from, to } = editor.state.selection;
       const selectedText = editor.state.doc.textBetween(from, to, ' ');
       if (onAiAction && selectedText) {
-        onAiAction(selectedText);
+
+        onAiAction(selectedText, options);
+
+
+        setTimeout(() => {
+          editor.commands.focus();
+          updateToolbarPosition();
+        }, 0);
       }
     }
   };
 
-  if (!isVisible) return null;
-
-  return (
-    <div
-      className="toolbar"
-      style={{
-        top: `${position.top}px`,
-        left: `${position.left}px`,
-      }}
-    >
+  const renderToolbarButtons = () => (
+    <>
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={cn("toolbar__item", editor.isActive('bold') && "bg-periwinkle/50 text-black-pearl-900 dark:bg-gray-600")}
+        className={cn("toolbar__item", editor.isActive('bold') && "toolbar__item--active")}
         title="Bold"
       >
-        <Bold className="h-4 w-4" />
+        <Bold className="toolbar__item-icon" />
       </button>
 
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={cn("toolbar__item", editor.isActive('italic') && "bg-periwinkle/50 text-black-pearl-900 dark:bg-gray-600")}
+        className={cn("toolbar__item", editor.isActive('italic') && "toolbar__item--active")}
         title="Italic"
       >
-        <Italic className="h-4 w-4" />
+        <Italic className="toolbar__item-icon" />
       </button>
 
       <button
         onClick={() => editor.chain().focus().toggleUnderline().run()}
-        className={cn("toolbar__item", editor.isActive('underline') && "bg-periwinkle/50 text-black-pearl-900 dark:bg-gray-600")}
+        className={cn("toolbar__item", editor.isActive('underline') && "toolbar__item--active")}
         title="Underline"
       >
-        <Underline className="h-4 w-4" />
+        <Underline className="toolbar__item-icon" />
       </button>
 
-      <Separator orientation="vertical" className="h-[25px]" />
+      <Separator orientation="vertical" className="h-[25px] dark:bg-gray-800" />
 
       <button
-        onClick={() => editor.chain().focus().toggleHighlight().run()}
-        className={cn("toolbar__item", editor.isActive('highlight') && "bg-periwinkle/50 text-black-pearl-900 dark:bg-gray-600")}
-        title="Highlight"
+        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+        className={cn("toolbar__item", editor.isActive('heading', { level: 1 }) && "toolbar__item--active")}
+        title="Heading"
       >
-        <HighlighterIcon className="h-4 w-4" />
+        <Heading1 className="toolbar__item-icon" />
       </button>
 
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={cn("toolbar__item", editor.isActive('heading', { level: 2 }) && "bg-periwinkle/50 text-black-pearl-900 dark:bg-gray-600")}
+        className={cn("toolbar__item", editor.isActive('heading', { level: 2 }) && "toolbar__item--active")}
         title="Heading"
       >
-        <Heading2 className="h-4 w-4" />
+        <Heading2 className="toolbar__item-icon" />
+      </button>
+
+      <button
+        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+        className={cn("toolbar__item", editor.isActive('heading', { level: 3 }) && "toolbar__item--active")}
+        title="Heading"
+      >
+        <Heading3 className="toolbar__item-icon" />
+      </button>
+
+      <Separator orientation="vertical" className="h-[25px] dark:bg-gray-800" />
+
+      <button
+        onClick={() => editor.chain().focus().toggleHighlight().run()}
+        className={cn("toolbar__item", editor.isActive('highlight') && "toolbar__item--active")}
+        title="Highlight"
+      >
+        <HighlighterIcon className="toolbar__item-icon" />
       </button>
 
       <button
         onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={cn("toolbar__item", editor.isActive('bulletList') && "bg-periwinkle/50 text-black-pearl-900 dark:bg-gray-600")}
+        className={cn("toolbar__item", editor.isActive('bulletList') && "toolbar__item--active")}
         title="Bullet List"
       >
-        <List className="h-4 w-4" />
+        <List className="toolbar__item-icon" />
       </button>
 
       <button
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={cn("toolbar__item", editor.isActive('orderedList') && "bg-periwinkle/50 text-black-pearl-900 dark:bg-gray-600")}
+        className={cn("toolbar__item", editor.isActive('orderedList') && "toolbar__item--active")}
         title="Ordered List"
       >
-        <ListOrdered className="h-4 w-4" />
+        <ListOrdered className="toolbar__item-icon" />
       </button>
 
       <button
         onClick={() => editor.chain().focus().toggleTaskList().run()}
-        className={cn("toolbar__item", editor.isActive('taskList') && "bg-periwinkle/50 text-black-pearl-900 dark:bg-gray-600")}
+        className={cn("toolbar__item", editor.isActive('taskList') && "toolbar__item--active")}
         title="Task List"
       >
-        <ListTodo className="h-4 w-4" />
+        <ListTodo className="toolbar__item-icon" />
       </button>
+    </>
+  );
 
-      <Separator orientation="vertical" className="h-[25px]" />
+  const renderAiButton = (isMobileDevice: boolean) => {
+    if (isMobileDevice) {
+      return (
+        <div
+          className="writing-tools-selection-btn"
+          onClick={() => setShowAiToolbar(prev => !prev)}
+          style={{
+            top: `${position.top - 30}px`,
+            left: `${position.left}px`
+          }}
+        >
+          <PenTool className="h-4 w-4" />
+        </div>
+      );
+    }
 
-      {/* AI Button */}
-      <button
-        onClick={handleAiClick}
-        className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ml-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300"
-        title="AI Actions"
+    return (
+      <>
+        <Separator orientation="vertical" className="h-[25px] dark:bg-gray-800" />
+        <button className="toolbar__item--ai" onClick={() => setShowAiToolbar(prev => !prev)}>
+          <span className="text-sm">Improve with AI</span>
+          <PenTool className="toolbar__item-icon" />
+        </button>
+      </>
+    );
+  };
+
+  if (!isVisible && !hasSelection) return null;
+
+  return (
+    <>
+      <div
+        ref={toolbarRef}
+        className={isMobile ? "toolbar" : "toolbar toolbar--floating"}
+        style={
+          !isMobile ? {
+            top: `${position.top}px`,
+            left: `${position.left}px`
+          } : undefined
+        }
       >
-        <Sparkles className="h-4 w-4" />
-      </button>
-    </div>
+        <div className="flex space-x-2 items-center">
+          {renderToolbarButtons()}
+          {!isMobile && renderAiButton(false)}
+        </div>
+      </div>
+
+      {isMobile && hasSelection && renderAiButton(true)}
+
+      <AiToolbar
+        open={showAiToolbar}
+        onOpenChange={setShowAiToolbar}
+        onApply={handleAiApply}
+      />
+    </>
   );
 };

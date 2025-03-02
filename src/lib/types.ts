@@ -11,3 +11,6 @@ export interface Note {
   createdAt: string;
   folderId: string;
 }
+
+export type CreativityLevel = 'high' | 'medium' | 'low';
+export type ToneType = 'professional' | 'fun' | 'informative' | 'explanatory';

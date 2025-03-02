@@ -29,7 +29,7 @@ export default function Home() {
     return (
       <main className="w-full flex flex-col justify-center items-center h-screen">
         <div className="loader"></div>
-        <p className="italic mt-5">Loading your docs...</p>
+        <p className="font-semibold mt-5">Loading your docs...</p>
       </main>
     );
   }
@@ -43,7 +43,7 @@ export default function Home() {
           ? <NoteEditor note={currentNote} />
           : (
             <section className="px-4 flex flex-col items-center">
-              <div className="items-center gap-4 mb-6">
+              <div className="items-center gap-4 mb-6 max-w-[60%] lg:max-w-none">
                 <Image
                   src="/documents-dark.png"
                   className="hidden dark:block w-full h-full"
@@ -61,7 +61,9 @@ export default function Home() {
               </div>
 
               <h2 className="text-2xl font-bold mb-2 text-center">Create a New Note</h2>
-              <p className="text-lg mb-6 text-center">Click the button below to start creating your note.</p>
+              <p className="text-lg mb-6 text-center text-balance">
+                Start writing your next big idea or jot down some quick notes.
+              </p>
               <Button
                 variant="navy-secondary"
                 onClick={handleCreateNote}
