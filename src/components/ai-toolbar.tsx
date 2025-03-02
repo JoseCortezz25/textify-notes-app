@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Wand2 } from "lucide-react";
+import { PenToolIcon, Wand2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Sheet,
@@ -28,6 +28,7 @@ interface AiToolbarProps {
 export const AiToolbar = ({ onApply, open, onOpenChange }: AiToolbarProps) => {
   const [creativity, setCreativity] = useState<CreativityLevel>('medium');
   const [tone, setTone] = useState<ToneType>('professional');
+  const [instruction, setInstruction] = useState<string>('');
 
   const handleApply = () => {
     onApply({ creativity, tone });
@@ -47,6 +48,16 @@ export const AiToolbar = ({ onApply, open, onOpenChange }: AiToolbarProps) => {
         </SheetHeader>
 
         <div className="writing-tools">
+          <div className="relative">
+            <PenToolIcon className="size-5 absolute top-4 left-4 dark:text-blue-700" />
+            <input
+              placeholder="Describe your change"
+              className="writing-tools__input"
+              value={instruction}
+              onChange={(e) => setInstruction(e.target.value)}
+            />
+          </div>
+
           <div>
             <label className="writing-tools__label">Creativity Level</label>
             <div className="flex gap-2">
