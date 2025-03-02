@@ -1,0 +1,32 @@
+.writing-tools-selection-btn {
+  @apply absolute z-50 w-10 h-10 bg-white dark:bg-gray-900 shadow-md rounded-full flex items-center justify-center border border-periwinkle/50 dark:border-blue-900/30 text-main-blue dark:text-blue-300 transition-all transform hover:scale-105 active:scale-95;
+
+  margin-top: -30px;
+  transform: translateX(-50%);
+
+  &:active,
+  &:focus {
+    @apply bg-periwinkle/30 dark:bg-blue-900/20;
+  }
+}
+
+.writing-tools {
+  @apply space-y-5 mt-5 md:max-w-[600px] mx-auto;
+
+  &__input {
+    @apply w-full rounded-full py-[14px] pl-11 pr-5 h-auto text-[14px] dark:bg-black-pearl-950 dark:text-black-pearl-50 dark:border dark:border-blue-900;
+    @apply focus-visible:ring-0 focus:ring-0 focus:outline-none;
+  }
+
+  &__label {
+    @apply text-[14px] font-medium mb-2 block text-gray-600 dark:text-gray-300;
+  }
+}
+
+.option-btn {
+  @apply text-xs p-4 rounded-md capitalize flex-1 transition-colors bg-gray-100 dark:bg-gray-800 hover:bg-periwinkle/30 dark:hover:bg-gray-700;
+
+  &--selected {
+    @apply bg-periwinkle/50 text-black-pearl-900 dark:bg-blue-900/30 dark:text-blue-300 dark:hover:bg-blue-900/20;
+  }
+}

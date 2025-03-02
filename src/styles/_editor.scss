@@ -1,0 +1,60 @@
+.editor-text {
+  @apply mx-auto;
+  &__option {
+    @apply p-2.5 rounded-sm hover:bg-main-light-blue/30 dark:hover:bg-black-pearl-800;
+  }
+
+  &__content {
+    @apply mx-auto w-full sm:w-[80%] lg:max-w-[80ch];
+
+    > p,
+    h1,
+    span {
+      @apply text-black-pearl-950 dark:text-black-pearl-50 my-3;
+    }
+
+    mark {
+      @apply bg-[#0ea5e980] dark:bg-blue-900/80 dark:text-[#63ceffdf];
+    }
+
+    pre {
+      @apply bg-black-pearl-100/20 dark:bg-[#020816] px-4 py-2 rounded-sm;
+    }
+  }
+}
+
+.toolbar {
+  @apply fixed z-50 bg-white dark:bg-gray-900 shadow-md px-[9px] py-[6px] rounded-b-none rounded-t-[12px] md:rounded-[12px] flex items-center gap-3 sm:gap-2 border border-gray-200 dark:border-gray-900;
+  @apply overflow-scroll bottom-0 left-0 right-0 md:bottom-auto md:left-auto md:right-auto;
+
+  &__item {
+    @apply p-3 sm:p-2 hover:bg-periwinkle/30 dark:hover:bg-gray-800 rounded-[calc(12px_/_2)];
+  }
+
+  &__item-icon {
+    @apply w-6 h-6 md:w-4 md:h-4;
+  }
+
+  &__item--active {
+    @apply bg-periwinkle/50 text-black-pearl-900 dark:bg-blue-900/30 dark:text-blue-300;
+  }
+
+  &__item--ai {
+    @apply flex gap-2 items-center p-2 rounded-[calc(12px_/_2)] hover:bg-periwinkle/30 dark:hover:bg-blue-900/10 text-main-blue dark:text-blue-300;
+  }
+}
+
+.ai-toolbar {
+  @apply z-50 bg-white dark:bg-gray-900 shadow-md p-4 rounded-md border border-gray-200 dark:border-gray-800;
+  @apply w-[280px];
+
+  &--floating {
+    @apply absolute;
+  }
+
+  &--mobile {
+    @apply fixed bottom-20 left-0 right-0 mx-auto;
+    width: calc(100% - 2rem);
+    max-width: 400px;
+  }
+}

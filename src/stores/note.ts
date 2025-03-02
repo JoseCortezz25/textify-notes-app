@@ -1,7 +1,6 @@
-// src/stores/note.ts
 import { create } from 'zustand';
 import { Folder, Note } from '@/lib/types';
-import Database from '@/lib/indexed-db';
+import Storage from '@/lib/storage';
 
 interface FolderStore {
   folders: Folder[];
@@ -14,6 +13,7 @@ interface FolderStore {
   initializeFolders: () => Promise<void>;
   deleteFolder: (folderId: string) => Promise<void>;
   updateNoteContent: (folderId: string, noteId: string, content: string) => Promise<void>;
+  setFolders: (folders: Folder[]) => void;
 }
 
 export const useNoteStore = create<FolderStore>((set, get) => ({
@@ -22,16 +22,19 @@ export const useNoteStore = create<FolderStore>((set, get) => ({
 
   initializeFolders: async () => {
     try {
-      const db = Database.getInstance();
-      await db.waitForConnection();
-      const folders = await db.getAllFolders();
-      console.log('Normalized folders:', folders);
-      
+      const folders = await Storage.init();
       set({ folders, loading: false });
     } catch (error) {
-      console.error('Error loading folders:', error);
+      console.error('Failed to initialize folders:', error);
       set({ loading: false });
     }
+  },
+
+  setFolders: (folders: Folder[]) => {
+    set({ folders, loading: false });
+    Storage.saveFolders(folders).catch(err => 
+      console.error('Failed to save folders:', err)
+    );
   },
 
   createFolder: async (title: string) => {
@@ -47,14 +50,10 @@ export const useNoteStore = create<FolderStore>((set, get) => ({
       }]
     };
 
-    try {
-      await Database.getInstance().addFolder(newFolder);
-      set(state => ({ folders: [...state.folders, newFolder] }));
-      return newFolder;
-    } catch (error) {
-      console.error('Error creating folder:', error);
-      return undefined;
-    }
+    const updatedFolders = [...get().folders, newFolder];
+    set({ folders: updatedFolders });
+    await Storage.saveFolders(updatedFolders);
+    return newFolder;
   },
 
   updateFolder: async (folderId: string, name: string) => {
@@ -67,16 +66,12 @@ export const useNoteStore = create<FolderStore>((set, get) => ({
       name
     };
 
-    try {
-      await Database.getInstance().updateFolder(updatedFolder);
-      set(state => ({
-        folders: state.folders.map(f => 
-          f.folderId === folderId ? updatedFolder : f
-        )
-      }));
-    } catch (error) {
-      console.error('Error updating folder:', error);
-    }
+    const updatedFolders = folders.map(f => 
+      f.folderId === folderId ? updatedFolder : f
+    );
+    
+    set({ folders: updatedFolders });
+    await Storage.saveFolders(updatedFolders);
   },
 
   updateNote: async (folderId: string, noteId: string, title: string) => {
@@ -97,16 +92,12 @@ export const useNoteStore = create<FolderStore>((set, get) => ({
       ]
     };
 
-    try {
-      await Database.getInstance().updateFolder(updatedFolder);
-      set(state => ({
-        folders: state.folders.map(f => 
-          f.folderId === folderId ? updatedFolder : f
-        )
-      }));
-    } catch (error) {
-      console.error('Error updating note:', error);
-    }
+    const updatedFolders = folders.map(f => 
+      f.folderId === folderId ? updatedFolder : f
+    );
+    
+    set({ folders: updatedFolders });
+    await Storage.saveFolders(updatedFolders);
   },
 
   updateNoteContent: async (folderId: string, noteId: string, content: string) => {
@@ -127,16 +118,12 @@ export const useNoteStore = create<FolderStore>((set, get) => ({
       ]
     };
 
-    try {
-      await Database.getInstance().updateFolder(updatedFolder);
-      set(state => ({
-        folders: state.folders.map(f => 
-          f.folderId === folderId ? updatedFolder : f
-        )
-      }));
-    } catch (error) {
-      console.error('Error updating note content:', error);
-    }
+    const updatedFolders = folders.map(f => 
+      f.folderId === folderId ? updatedFolder : f
+    );
+    
+    set({ folders: updatedFolders });
+    await Storage.saveFolders(updatedFolders);
   },
 
   addNote: async (folderId: string, note: Note) => {
@@ -149,16 +136,12 @@ export const useNoteStore = create<FolderStore>((set, get) => ({
       notes: [...folders[folderIndex].notes, note]
     };
 
-    try {
-      await Database.getInstance().updateFolder(updatedFolder);
-      set(state => ({
-        folders: state.folders.map(f => 
-          f.folderId === folderId ? updatedFolder : f
-        )
-      }));
-    } catch (error) {
-      console.error('Error adding note:', error);
-    }
+    const updatedFolders = folders.map(f => 
+      f.folderId === folderId ? updatedFolder : f
+    );
+    
+    set({ folders: updatedFolders });
+    await Storage.saveFolders(updatedFolders);
   },
 
   deleteNote: async (folderId: string, noteId: string) => {
@@ -171,26 +154,17 @@ export const useNoteStore = create<FolderStore>((set, get) => ({
       notes: folders[folderIndex].notes.filter(n => n.noteId !== noteId)
     };
 
-    try {
-      await Database.getInstance().updateFolder(updatedFolder);
-      set(state => ({
-        folders: state.folders.map(f => 
-          f.folderId === folderId ? updatedFolder : f
-        )
-      }));
-    } catch (error) {
-      console.error('Error deleting note:', error);
-    }
+    const updatedFolders = folders.map(f => 
+      f.folderId === folderId ? updatedFolder : f
+    );
+    
+    set({ folders: updatedFolders });
+    await Storage.saveFolders(updatedFolders);
   },
 
   deleteFolder: async (folderId: string) => {
-    try {
-      await Database.getInstance().deleteFolder(folderId);
-      set(state => ({
-        folders: state.folders.filter(f => f.folderId !== folderId)
-      }));
-    } catch (error) {
-      console.error('Error deleting folder:', error);
-    }
+    const updatedFolders = get().folders.filter(f => f.folderId !== folderId);
+    set({ folders: updatedFolders });
+    await Storage.saveFolders(updatedFolders);
   }
 }));

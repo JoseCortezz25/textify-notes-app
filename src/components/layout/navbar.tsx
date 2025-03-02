@@ -33,7 +33,7 @@ export const Navbar = () => {
 
   return (
     <header className="w-full py-3 border-b border-gray-200 dark:border-neutral-800 pl-2 pr-5 flex justify-between">
-      <nav className="flex gap-4 items-center">
+      <nav className="flex gap-4 items-center justify-between w-full">
         <button onClick={toggleSidebar} className="p-2">
           <Sidebar size={20} />
         </button>
@@ -47,7 +47,7 @@ export const Navbar = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 onBlur={handleEditingTitle}
                 onKeyDown={(e) => e.key === 'Enter' && handleEditingTitle()}
-                className="bg-transparent border-none outline-none ring-0 focus:border-none focus:outline-none focus:ring-0 w-[100%] md:min-w-[300px] focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-transparent focus:ring-offset-2 rounded-none focus-visible:ring-offset-transparent focus-visible:ring-transparent px-"
+                className="bg-transparent border-none outline-none ring-0 focus:border-none focus:outline-none focus:ring-0 w-[100%] md:min-w-[300px] focus-visible:ring-0 focus-visible:ring-offset-0 focus:ring-offset-transparent focus:ring-offset-2 rounded-none focus-visible:ring-offset-transparent focus-visible:ring-transparent"
                 autoFocus
               />
             ) : (

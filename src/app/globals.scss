@@ -115,20 +115,20 @@
 }
 
 .bg-white-checked-icon {
-  background-image: url("/white-check-icon.png");
+  background-image: url('/white-check-icon.png');
 }
 
 .dark .bg-white-checked-icon {
-  background-image: url("/white-check-icon.png");
+  background-image: url('/white-check-icon.png');
 }
 
 @layer components {
   .bg-black-checked-icon {
-    background-image: url("/black-check-icon.png");
+    background-image: url('/black-check-icon.png');
   }
 
   .dark .bg-black-checked-icon {
-    background-image: url("/black-check-icon.png");
+    background-image: url('/black-check-icon.png');
   }
 }
 
@@ -145,8 +145,14 @@
     @apply text-lg;
   }
 
-  h4, h5, h6 {
+  h4,
+  h5,
+  h6 {
     @apply text-base;
+  }
+
+  blockquote {
+    @apply border-l-4 pl-4 py-2 my-4;
   }
 
   p {
@@ -161,28 +167,28 @@
     @apply list-decimal ml-6;
   }
 
-  ul[data-type="taskList"] {
+  ul[data-type='taskList'] {
     @apply flex flex-col gap-2 my-2;
 
     li {
       @apply list-none flex gap-3 ml-0 relative;
-  
-      input[type="checkbox"] {
+
+      input[type='checkbox'] {
         @apply w-0 h-0 absolute;
-  
+
         &::before {
-          content: "";
+          content: '';
           @apply absolute border border-black dark:border-white rounded-full w-5 h-5;
         }
       }
-  
+
       div {
         @apply ml-4;
       }
     }
 
-    li[data-checked="true"] {
-      input[type="checkbox"] {
+    li[data-checked='true'] {
+      input[type='checkbox'] {
         @apply text-white stroke-white dark:text-black;
 
         &::before {
@@ -199,21 +205,29 @@
   }
 
   &__trigger {
-    @apply w-full;           
-    
+    @apply w-full rounded-lg;
+
     &:hover {
       @apply dark:bg-black-pearl-900;
     }
   }
 
   &__trigger-btn {
-    @apply flex justify-between items-center bg-black-pearl-50 dark:bg-black-pearl-950 py-2 h-auto rounded-lg dark:hover:bg-black-pearl-700;
+    @apply flex justify-between items-center bg-black-pearl-50 dark:bg-black-pearl-950 py-2 h-auto rounded-lg overflow-hidden;
+
+    &:hover {
+      @apply hover:bg-black-pearl-60 text-black-pearl-900 dark:hover:bg-black-pearl-800;
+    }
   }
 
   &__content {
+    [data-sidebar='menu-sub'] {
+      @apply mr-0 pr-3.5;
+    }
+
     ul {
       @apply border-none;
-  
+
       &:hover {
         @apply bg-neutral-100 dark:bg-black-pearl-900 rounded-md cursor-pointer;
       }
@@ -226,14 +240,14 @@
 }
 
 .sidebar-menu-sub {
-  @apply flex items-center justify-between py-2;
+  @apply flex items-center justify-between py-2 text-black-pearl-900 dark:text-black-pearl-50;
 
   span {
     @apply line-clamp-1;
   }
 
   .btn-delete-note {
-    @apply hidden text-red-800;
+    @apply hidden;
   }
 
   &:hover .btn-delete-note {
@@ -244,7 +258,7 @@
 .dropdown-content {
   @apply rounded-lg bg-black-pearl-50 dark:bg-black-pearl-950;
 
-  [role="menuitem"] {
+  [role='menuitem'] {
     @apply rounded-md font-medium text-black-pearl-950 dark:text-black-pearl-50 cursor-pointer;
 
     &:hover {
@@ -252,21 +266,45 @@
     }
   }
 }
+.loader {
+  width: 60px;
+  aspect-ratio: 2;
+  --_g: no-repeat radial-gradient(circle closest-side, #000 90%, #0000);
+  background:
+    var(--_g) 0% 50%,
+    var(--_g) 50% 50%,
+    var(--_g) 100% 50%;
+  background-size: calc(100% / 3) 50%;
+  animation: l3 1s infinite linear;
+}
 
-.editor-text {
-  &__option {
-    @apply p-2.5 rounded-sm hover:bg-main-light-blue/30 dark:hover:bg-black-pearl-800;
+.dark .loader {
+  --_g: no-repeat radial-gradient(circle closest-side, #fff 90%, #0000);
+}
+
+@keyframes l3 {
+  20% {
+    background-position:
+      0% 0%,
+      50% 50%,
+      100% 50%;
   }
-
-  &__content {
-    @apply mx-auto w-full lg:w-[70%] xl:w-[50%];
-
-    mark {
-      @apply bg-sky-500;
-    }
-
-    pre {
-      @apply bg-black-pearl-100/20 dark:bg-[#020816] px-4 py-2 rounded-sm;
-    }
+  40% {
+    background-position:
+      0% 100%,
+      50% 0%,
+      100% 50%;
+  }
+  60% {
+    background-position:
+      0% 50%,
+      50% 100%,
+      100% 0%;
+  }
+  80% {
+    background-position:
+      0% 50%,
+      50% 50%,
+      100% 100%;
   }
 }

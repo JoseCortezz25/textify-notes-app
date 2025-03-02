@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem } from "@/components/ui/sidebar";
 import { useNoteStore } from "@/stores/note";
 import { useEditorStore } from "@/stores/editor";
 import { Plus, Pencil, Trash } from "lucide-react";
@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Note } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
 
 export const AppSidebar = () => {
   const {
@@ -48,23 +47,24 @@ export const AppSidebar = () => {
 
   return (
     <Sidebar>
-      <SidebarContent className="bg-black-pearl-50 dark:bg-black-pearl-950">
-        <SidebarGroup>
-          <SidebarGroupLabel className="py-7 mb-2 flex justify-between">
-            <span className="text-xl font-medium text-neutral-900 dark:text-white">Textify <b className="font-black">Notes</b></span>
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <Button
-                className="w-full"
-                variant="light-navy-secondary"
-                onClick={() => createFolder("New Folder")}
-              >
-                Create folder
-                <Plus className="h-4 w-4" />
-              </Button>
+      <SidebarHeader>
+        <SidebarGroupLabel className="py-7 flex justify-between">
+          <span className="text-[18px] font-medium text-neutral-900 dark:text-white">Textify <b className="font-black">Notes</b></span>
+          <Button
+            variant="light-navy-secondary"
+            onClick={() => createFolder("New Folder")}
+            size="icon"
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        </SidebarGroupLabel>
+      </SidebarHeader>
 
-              <div className="mt-5">
+      <SidebarContent className="bg-black-pearl-50 dark:bg-black-pearl-950">
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarGroup>
+              <div className="space-y-3">
                 {folders && folders.map((folder) => (
                   <Collapsible
                     key={folder.folderId}
@@ -151,11 +151,10 @@ export const AppSidebar = () => {
                   </Collapsible>
                 ))}
               </div>
-
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent >
+            </SidebarGroup>
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarContent>
     </Sidebar >
   );
 };
