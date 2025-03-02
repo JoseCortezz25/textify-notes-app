@@ -205,7 +205,7 @@
   }
 
   &__trigger {
-    @apply w-full;
+    @apply w-full rounded-lg;
 
     &:hover {
       @apply dark:bg-black-pearl-900;
@@ -216,7 +216,7 @@
     @apply flex justify-between items-center bg-black-pearl-50 dark:bg-black-pearl-950 py-2 h-auto rounded-lg overflow-hidden;
 
     &:hover {
-      @apply bg-black-pearl-60 text-black-pearl-900 dark:bg-black-pearl-800 rounded-lg;
+      @apply hover:bg-black-pearl-60 text-black-pearl-900 dark:hover:bg-black-pearl-800;
     }
   }
 
