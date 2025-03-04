@@ -9,7 +9,7 @@ import UnderlineExtension from "@tiptap/extension-underline";
 import { Note } from "@/lib/types";
 import { debounce } from "@/lib/utils";
 import { useNoteStore } from "@/stores/note";
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FloatingToolbar } from "./floating-toolbar";
 
 export const NoteEditor = ({ note }: { note: Note }) => {
@@ -33,11 +33,6 @@ export const NoteEditor = ({ note }: { note: Note }) => {
     }, 500)
   });
 
-  const handleAiAction = useCallback((text: string) => {
-    setSelectedText(text);
-    // TODO: Implement AI action
-    console.log("AI action triggered with text:", text);
-  }, []);
 
   useEffect(() => {
     if (editor && editor.getHTML() !== note.content) {
@@ -51,7 +46,7 @@ export const NoteEditor = ({ note }: { note: Note }) => {
 
   return (
     <div className="editor-text relative flex flex-col flex-1">
-      {editor && <FloatingToolbar editor={editor} onAiAction={handleAiAction} />}
+      {editor && <FloatingToolbar editor={editor} />}
       <div ref={editorRef} className="flex-1 overflow-y-auto  editor-text__content">
         <EditorContent editor={editor} className="h-full" />
       </div>

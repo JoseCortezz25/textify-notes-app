@@ -18,19 +18,21 @@ import {
 import { cn } from "@/lib/utils";
 import { Separator } from './ui/separator';
 import { AiToolbar, AiOptions } from './ai-toolbar';
+import { improveWriting } from '@/actions/writer';
 
 type FloatingToolbarProps = {
   editor: Editor;
-  onAiAction?: (selectedText: string, options?: AiOptions) => void;
 };
 
-export const FloatingToolbar = ({ editor, onAiAction }: FloatingToolbarProps) => {
+export const FloatingToolbar = ({ editor }: FloatingToolbarProps) => {
   const toolbarRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ top: -9999, left: -9999 });
   const [isVisible, setIsVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [showAiToolbar, setShowAiToolbar] = useState(false);
   const [hasSelection, setHasSelection] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectionLength, setSelectionLength] = useState(0);
 
   useEffect(() => {
     const MOBILE_BREAKPOINT = 768;
@@ -54,6 +56,9 @@ export const FloatingToolbar = ({ editor, onAiAction }: FloatingToolbarProps) =>
       const { view } = editor;
       const { from, to } = editor.state.selection;
 
+      const selectedText = editor.state.doc.textBetween(from, to, ' ');
+      setSelectionLength(selectedText.length);
+
       const start = view.coordsAtPos(from);
       const end = view.coordsAtPos(to);
 
@@ -70,6 +75,7 @@ export const FloatingToolbar = ({ editor, onAiAction }: FloatingToolbarProps) =>
 
       setIsVisible(true);
     } else {
+      setSelectionLength(0);
       setIsVisible(isMobile);
     }
   }, [editor, isMobile]);
@@ -115,10 +121,32 @@ export const FloatingToolbar = ({ editor, onAiAction }: FloatingToolbarProps) =>
     if (editor && !editor.state.selection.empty) {
       const { from, to } = editor.state.selection;
       const selectedText = editor.state.doc.textBetween(from, to, ' ');
-      if (onAiAction && selectedText) {
 
-        onAiAction(selectedText, options);
+      const { instruction, creativity, tone } = options;
 
+      const formData = new FormData();
+      formData.append('instruction', instruction);
+      formData.append('creativity', creativity);
+      formData.append('tone', tone);
+      formData.append('selectedText', selectedText);
+      const fullText = editor.getText();
+      const formatedText = fullText.replace(/\n/g, ' ');
+      formData.append('fullText', formatedText);
+
+
+      if (selectedText) {
+        setLoading(true);
+        improveWriting(formData)
+          .then((result) => {
+            editor.chain().focus().insertContent(result).run();
+          })
+          .catch((error) => {
+            console.error('AI ERROR', error);
+          })
+          .finally(() => {
+            setLoading(false);
+            setShowAiToolbar(false);
+          });
 
         setTimeout(() => {
           editor.commands.focus();
@@ -243,6 +271,8 @@ export const FloatingToolbar = ({ editor, onAiAction }: FloatingToolbarProps) =>
     );
   };
 
+  const shouldShowAiFeatures = selectionLength >= 50;
+
   if (!isVisible && !hasSelection) return null;
 
   return (
@@ -259,16 +289,17 @@ export const FloatingToolbar = ({ editor, onAiAction }: FloatingToolbarProps) =>
       >
         <div className="flex space-x-2 items-center">
           {renderToolbarButtons()}
-          {!isMobile && renderAiButton(false)}
+          {!isMobile && shouldShowAiFeatures && renderAiButton(false)}
         </div>
       </div>
 
-      {isMobile && hasSelection && renderAiButton(true)}
+      {isMobile && shouldShowAiFeatures && renderAiButton(true)}
 
       <AiToolbar
-        open={showAiToolbar}
+        open={showAiToolbar && shouldShowAiFeatures}
         onOpenChange={setShowAiToolbar}
         onApply={handleAiApply}
+        loading={loading}
       />
     </>
   );
