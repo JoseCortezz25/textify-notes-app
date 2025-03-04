@@ -47,7 +47,7 @@ export const AppSidebar = () => {
 
   return (
     <Sidebar>
-      <SidebarHeader>
+      <SidebarHeader className="bg-black-pearl-50 dark:bg-black-pearl-950">
         <SidebarGroupLabel className="py-7 flex justify-between">
           <span className="text-[18px] font-medium text-neutral-900 dark:text-white">Textify <b className="font-black">Notes</b></span>
           <Button

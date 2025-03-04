@@ -49,7 +49,7 @@ export const AiToolbar = ({ onApply, open, onOpenChange }: AiToolbarProps) => {
 
         <div className="writing-tools">
           <div className="relative">
-            <PenToolIcon className="size-5 absolute top-4 left-4 dark:text-blue-700" />
+            <PenToolIcon className="size-5 absolute top-4 left-4 text-main-blue dark:text-blue-700" />
             <input
               placeholder="Describe your change"
               className="writing-tools__input"
