@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { PenToolIcon, Wand2 } from "lucide-react";
+import { Loader2, PenToolIcon, Wand2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Sheet,
@@ -17,24 +17,27 @@ import { Button } from './ui/button';
 export interface AiOptions {
   creativity: CreativityLevel;
   tone: ToneType;
+  instruction: string;
 }
 
 interface AiToolbarProps {
   onApply: (options: AiOptions) => void;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  loading?: boolean;
 }
 
-export const AiToolbar = ({ onApply, open, onOpenChange }: AiToolbarProps) => {
+export const AiToolbar = ({ onApply, open, onOpenChange, loading }: AiToolbarProps) => {
   const [creativity, setCreativity] = useState<CreativityLevel>('medium');
   const [tone, setTone] = useState<ToneType>('professional');
   const [instruction, setInstruction] = useState<string>('');
 
   const handleApply = () => {
-    onApply({ creativity, tone });
-    if (onOpenChange) {
-      onOpenChange(false);
-    }
+    onApply({
+      creativity,
+      tone,
+      instruction
+    });
   };
 
   return (
@@ -49,7 +52,7 @@ export const AiToolbar = ({ onApply, open, onOpenChange }: AiToolbarProps) => {
 
         <div className="writing-tools">
           <div className="relative">
-            <PenToolIcon className="size-5 absolute top-4 left-4 dark:text-blue-700" />
+            <PenToolIcon className="size-5 absolute top-4 left-4 text-main-blue dark:text-blue-700" />
             <input
               placeholder="Describe your change"
               className="writing-tools__input"
@@ -92,9 +95,11 @@ export const AiToolbar = ({ onApply, open, onOpenChange }: AiToolbarProps) => {
             onClick={handleApply}
             variant="submit"
             className="mt-6"
+            disabled={loading}
           >
             <Wand2 className="h-4 w-4" />
             <span>Improve Writing</span>
+            {loading && <Loader2 className="h-4 w-4 loader-animation" />}
           </Button>
         </div>
       </SheetContent>

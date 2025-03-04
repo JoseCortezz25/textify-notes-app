@@ -14,7 +14,7 @@
   @apply space-y-5 mt-5 md:max-w-[600px] mx-auto;
 
   &__input {
-    @apply w-full rounded-full py-[14px] pl-11 pr-5 h-auto text-[14px] dark:bg-black-pearl-950 dark:text-black-pearl-50 dark:border dark:border-blue-900;
+    @apply w-full rounded-full py-[14px] pl-11 pr-5 h-auto text-[14px] text-main-blue border border-main-blue dark:bg-black-pearl-950 dark:text-black-pearl-50 dark:border dark:border-blue-900;
     @apply focus-visible:ring-0 focus:ring-0 focus:outline-none;
   }
 
