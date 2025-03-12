@@ -7,6 +7,11 @@
   &__content {
     @apply mx-auto w-full sm:w-[80%] lg:max-w-[80ch];
 
+
+    .tiptap {
+      @apply space-y-3;
+    }
+
     > p,
     h1,
     span {
@@ -24,15 +29,21 @@
 }
 
 .toolbar {
-  @apply fixed z-50 bg-white dark:bg-gray-900 shadow-md px-[9px] py-[6px] rounded-b-none rounded-t-[12px] md:rounded-[12px] flex items-center gap-3 sm:gap-2 border border-gray-200 dark:border-gray-900;
-  @apply overflow-scroll bottom-0 left-0 right-0 md:bottom-auto md:left-auto md:right-auto;
+  @apply  bg-white dark:bg-gray-900 shadow-md px-[9px] py-[6px] rounded-[12px] flex items-center gap-1 sm:gap-2 border border-gray-200 dark:border-gray-900 w-full overflow-scroll;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 
   &__item {
     @apply p-3 sm:p-2 hover:bg-periwinkle/30 dark:hover:bg-gray-800 rounded-[calc(12px_/_2)];
   }
 
   &__item-icon {
-    @apply w-6 h-6 md:w-4 md:h-4;
+    @apply w-4 h-4;
   }
 
   &__item--active {
@@ -41,6 +52,10 @@
 
   &__item--ai {
     @apply flex gap-2 items-center p-2 rounded-[calc(12px_/_2)] hover:bg-periwinkle/30 dark:hover:bg-blue-900/10 text-main-blue dark:text-blue-300;
+  
+    span {
+      @apply min-w-[120px] my-0 text-main-navy font-semibold dark:text-blue-200;
+    }
   }
 }
 
