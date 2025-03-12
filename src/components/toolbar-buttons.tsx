@@ -19,7 +19,7 @@ import { AIButton } from "./ai-button";
 interface ToolbarButtonsProps {
   editor: Editor;
   onOpenAIToolbar: () => void;
-  selectedText?: string;
+  selectedText: string;
 }
 
 export const ToolbarButtons = ({ editor, onOpenAIToolbar, selectedText }: ToolbarButtonsProps) => {
