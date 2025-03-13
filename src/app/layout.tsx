@@ -10,7 +10,16 @@ const montserrat = Montserrat({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Textify Notes",
   description: "A simple note-taking app powered AI",
-  metadataBase: new URL("https://textify-notes.vercel.app/")
+  applicationName: "Textify Notes",
+  metadataBase: new URL("https://textify-notes.vercel.app/"),
+  keywords: ['AI', 'Textify', 'Notes', 'Note-taking', 'Productivity', 'Writing', 'Text Editor'],
+  creator: "josecortezz25",
+  openGraph: {
+    title: "Textify Notes",
+    description: "A simple note-taking app powered AI",
+    url: "https://textify-notes.vercel.app/",
+    siteName: "Textify Notes",
+  },
 };
 
 export default function RootLayout({
