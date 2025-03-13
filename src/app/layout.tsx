@@ -18,8 +18,8 @@ export const metadata: Metadata = {
     title: "Textify Notes",
     description: "A simple note-taking app powered AI",
     url: "https://textify-notes.vercel.app/",
-    siteName: "Textify Notes",
-  },
+    siteName: "Textify Notes"
+  }
 };
 
 export default function RootLayout({
