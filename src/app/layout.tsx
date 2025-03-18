@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import "./globals.scss";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import "./globals.scss";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -35,6 +36,7 @@ export default function RootLayout({
     >
       <head />
       <body className="bg-black-pearl-50 text-neutral-950 dark:text-black-pearl-50 dark:bg-black-pearl-950">
+
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -46,6 +48,7 @@ export default function RootLayout({
             {children}
           </SidebarProvider>
         </ThemeProvider>
+        <GoogleAnalytics gaId={process.env.GOOGLE_ANALYTICS_ID as string} />
       </body>
     </html>
   );
